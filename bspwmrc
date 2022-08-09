@@ -1,18 +1,33 @@
 #! /bin/bash
 
 # autostart
-killall -q sxhkd picom
+killall -q sxhkd picom lxsession blueman-applet dunst polybar
 # killall -q sxhkd
 sxhkd -c $HOME/.config/bspwm/sxhkdrc &
-picom -b
+picom -f -i 0.95 &
 # picom -fb --inactive-opacity 0.90  --active-opacity 0.95 &
 $HOME/.fehbg
 xrdb $HOME/.Xresources
+# xrdb $HOME/.cache/wal/colors.Xresources
 $HOME/.config/bspwm/polybar.sh 
+lxsession -a -n &
+setxkbmap -layout us -variant altgr-intl
+xmodmap -e "keysym Menu = Multi_key"
+blueman-applet & 
+dunst &
 
 # wm settings
+xsetroot -cursor_name left_ptr
 bspc monitor -d 1 2 3 4 5
 bspc config border_width 1
 bspc config window_gap 10
 bspc config split_ratio 0.5
 bspc config focus_follows_pointer true
+
+# window rules
+bspc rule -a mpv \
+     state=floating sticky=on follow=off focus=on
+bspc rule -a "*:Toolkit:Picture-in-Picture" \
+     state=floating sticky=on follow=off focus=on
+bspc rule -a "Mullvad VPN" \
+     state=floating sticky=off follow=off focus=on
